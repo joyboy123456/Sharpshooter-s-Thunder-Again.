@@ -4,24 +4,37 @@ import { Bloom, EffectComposer } from "@react-three/postprocessing";
 import { Physics } from "@react-three/rapier";
 import { Suspense, useState } from "react";
 import { Experience } from "./components/Experience";
-import { Leaderboard } from "./components/Leaderboard";
+import { GameUI } from "./components/GameUI";
+import { OrientationLock } from "./components/OrientationLock";
+import { StartScreen } from "./components/StartScreen";
+import { TouchControls } from "./components/TouchControls";
 
 function App() {
   const [downgradedPerformance, setDowngradedPerformance] = useState(false);
+  const [gameStarted, setGameStarted] = useState(false);
+
+  if (!gameStarted) {
+    return (
+      <OrientationLock>
+        <StartScreen onStart={() => setGameStarted(true)} />
+      </OrientationLock>
+    );
+  }
+
   return (
-    <>
+    <OrientationLock>
       <Loader />
-      <Leaderboard />
+      <GameUI />
+      <TouchControls />
       <Canvas
         shadows
-        camera={{ position: [0, 30, 0], fov: 30, near: 2 }}
-        dpr={[1, 1.5]} // optimization to increase performance on retina/4k devices
+        camera={{ position: [0, 2, 0], fov: 75, near: 0.1, far: 1000 }}
+        dpr={[1, 1.5]}
       >
-        <color attach="background" args={["#242424"]} />
+        <color attach="background" args={["#1a1a1a"]} />
         <SoftShadows size={42} />
 
         <PerformanceMonitor
-          // Detect low performance devices
           onDecline={(fps) => {
             setDowngradedPerformance(true);
           }}
@@ -32,13 +45,12 @@ function App() {
           </Physics>
         </Suspense>
         {!downgradedPerformance && (
-          // disable the postprocessing on low-end devices
           <EffectComposer disableNormalPass>
             <Bloom luminanceThreshold={1} intensity={1.5} mipmapBlur />
           </EffectComposer>
         )}
       </Canvas>
-    </>
+    </OrientationLock>
   );
 }
 
