@@ -1,38 +1,30 @@
-import { usePlayersList } from "playroomkit";
+import { useGameStore } from "../store/gameStore";
 
 export const Leaderboard = () => {
-  const players = usePlayersList(true);
+  const player = useGameStore((state) => state.player);
+
   return (
     <>
       <div className="fixed top-0 left-0 right-0 p-4 flex z-10 gap-4">
-        {players.map((player) => (
+        <div className="bg-white bg-opacity-60 backdrop-blur-sm flex items-center rounded-lg gap-2 p-2 min-w-[140px]">
           <div
-            key={player.id}
-            className={`bg-white  bg-opacity-60 backdrop-blur-sm flex items-center rounded-lg gap-2 p-2 min-w-[140px]`}
+            className="w-10 h-10 border-2 rounded-full flex items-center justify-center bg-blue-500"
+            style={{ borderColor: "#4a90d9" }}
           >
-            <img
-              src={player.state.profile?.photo || ""}
-              className="w-10 h-10 border-2 rounded-full"
-              style={{
-                borderColor: player.state.profile?.color,
-              }}
-            />
-            <div className="flex-grow">
-              <h2 className={`font-bold text-sm`}>
-                {player.state.profile?.name}
-              </h2>
-              <div className="flex text-sm items-center gap-4">
-                <p>🔫 {player.state.kills}</p>
-                <p>💀 {player.state.deaths}</p>
-              </div>
+            <span className="text-white font-bold">P</span>
+          </div>
+          <div className="flex-grow">
+            <h2 className="font-bold text-sm">Player</h2>
+            <div className="flex text-sm items-center gap-4">
+              <p>Kills: {player.kills}</p>
+              <p>Deaths: {player.deaths}</p>
             </div>
           </div>
-        ))}
+        </div>
       </div>
       <button
         className="fixed top-4 right-4 z-10 text-white"
         onClick={() => {
-          // toggle fullscreen
           if (document.fullscreenElement) {
             document.exitFullscreen();
           } else {

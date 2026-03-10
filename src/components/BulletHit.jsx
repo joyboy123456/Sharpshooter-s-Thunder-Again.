@@ -1,6 +1,5 @@
 import { Instance, Instances } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
-import { isHost } from "playroomkit";
 import { useEffect, useMemo, useRef } from "react";
 import { Color, MathUtils, Vector3 } from "three";
 
@@ -30,7 +29,7 @@ export const BulletHit = ({ nb = 100, position, onEnded }) => {
           MathUtils.randFloat(-0.6, 0.6),
           MathUtils.randFloat(-0.6, 0.6)
         ),
-        scale: 0.1, //MathUtils.randFloat(0.03, 0.09),
+        scale: 0.1,
         speed: MathUtils.randFloat(0.1, 0.3),
       })),
     [nb]
@@ -38,9 +37,7 @@ export const BulletHit = ({ nb = 100, position, onEnded }) => {
 
   useEffect(() => {
     setTimeout(() => {
-      if (isHost()) {
-        onEnded();
-      }
+      onEnded();
     }, 500);
   }, []);
 
