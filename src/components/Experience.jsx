@@ -48,7 +48,7 @@ export const Experience = ({ downgradedPerformance = false }) => {
       {hits.map((hit) => (
         <BulletHit key={hit.id} {...hit} onEnded={() => onHitEnded(hit.id)} />
       ))}
-      <Environment preset="sunset" />
+      <Environment files="/hdri/venice_sunset_1k.hdr" />
     </>
   );
 };
